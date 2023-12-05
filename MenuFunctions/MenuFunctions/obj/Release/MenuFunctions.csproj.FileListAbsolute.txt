@@ -1,0 +1,16 @@
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\MenuFunctions.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\MenuFunctions.pdb
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\Newtonsoft.Json.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\SharpShell.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\Newtonsoft.Json.xml
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\bin\Release\SharpShell.xml
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.csproj.AssemblyReference.cache
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\Interop.IWshRuntimeLibrary.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\Interop.SHDocVw.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.csproj.ResolveComReference.cache
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.Properties.Resources.resources
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.csproj.GenerateResource.cache
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.csproj.CoreCompileInputs.cache
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.csproj.CopyComplete
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.dll
+D:\OneDrive - qxyl\C#\右键菜单扩展\MenuFunctions\MenuFunctions\obj\Release\MenuFunctions.pdb

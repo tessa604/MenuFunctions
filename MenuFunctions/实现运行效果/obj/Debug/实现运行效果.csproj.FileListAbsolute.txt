@@ -1,0 +1,16 @@
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\实现运行效果.exe.config
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\实现运行效果.exe
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\实现运行效果.pdb
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Extensions.dll
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Logger.dll
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Extensions.pdb
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Extensions.xml
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Logger.pdb
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\bin\Debug\Toolbox.Logger.xml
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.csproj.AssemblyReference.cache
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.csproj.CoreCompileInputs.cache
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.csproj.CopyComplete
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.exe
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.pdb
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\Interop.IWshRuntimeLibrary.dll
+D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\实现运行效果\obj\Debug\实现运行效果.csproj.ResolveComReference.cache
