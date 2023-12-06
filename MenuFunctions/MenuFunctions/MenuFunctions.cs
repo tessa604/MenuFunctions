@@ -16,6 +16,7 @@ using SharpShell.Interop;
 using System.Drawing.Imaging;
 using System.Threading;
 using System.Net;
+using System.Text.RegularExpressions;
 
 
 
@@ -102,7 +103,7 @@ namespace MenuFunctions
             bool isFolder = SelectedItemPaths.Any(p => Directory.Exists(p));
 
             var menuItems = LoadMenuItemsFromConfig();
-
+            var selectedPaths = SelectedItemPaths.ToList(); // 获取选中的路径
             foreach (var itemConfig in menuItems)
             {
                 // 根据 ShowOnFolderBackground 和 ShowOnFiles 决定是否添加菜单项
@@ -113,11 +114,11 @@ namespace MenuFunctions
                     {
                         if (itemConfig.ShowInRootMenu)
                         {
-                            AddMenuItem(menu.Items, itemConfig, currentFolderPath);
+                            AddMenuItem(menu.Items, itemConfig, currentFolderPath, selectedPaths);
                         }
                         else
                         {
-                            AddMenuItem(rootItem.DropDownItems, itemConfig, currentFolderPath);
+                            AddMenuItem(rootItem.DropDownItems, itemConfig, currentFolderPath, selectedPaths);
                         }
                     }
                 }
@@ -135,13 +136,69 @@ namespace MenuFunctions
 
 
 
-        private void AddMenuItem(ToolStripItemCollection parentMenuItems, MenuItemConfig config, string currentFolderPath)
+        private void AddMenuItem(ToolStripItemCollection parentMenuItems, MenuItemConfig config, string currentFolderPath, IEnumerable<string> selectedPaths)
         {
 
 
             if (!config.IsVisible) return; // 如果菜单项设置为不可见，则跳过
 
             var menuItem = new ToolStripMenuItem(config.Text);
+
+
+            if (config.IsSeparator)
+            {
+                parentMenuItems.Add(new ToolStripSeparator());
+                return;
+            }
+
+            //加载动态文件名
+            // 使用正则表达式找出所有的动态替换标记
+            var regex = new Regex(@"\$\{([a-zA-Z-]+)\}");
+            var matches = regex.Matches(config.Text);
+
+            foreach (Match match in matches)
+            {
+                string placeholder = match.Groups[1].Value.ToLower(); // 获取括号内的文本
+                string replacement = "";
+
+                // 检查是否有选中的路径，如果没有，则使用背景的路径
+                bool isSelectedPathsEmpty = !selectedPaths.Any();
+                var effectivePaths = isSelectedPathsEmpty ? new[] { currentFolderPath } : selectedPaths;
+
+                switch (placeholder)
+                {
+                    case "filename":
+                        replacement = string.Join(", ", effectivePaths.Select(Path.GetFileNameWithoutExtension));
+                        break;
+                    case "filename-single":
+                        replacement = Path.GetFileNameWithoutExtension(effectivePaths.FirstOrDefault());
+                        break;
+                    case "extension":
+                        replacement = string.Join(", ", effectivePaths.Select(Path.GetExtension));
+                        break;
+                    case "extension-single":
+                        replacement = Path.GetExtension(effectivePaths.FirstOrDefault());
+                        break;
+                    case "parentdir":
+                        replacement = string.Join(", ", effectivePaths.Select(p => Path.GetDirectoryName(p)));
+                        break;
+                    case "parentdir-single":
+                        replacement = Path.GetDirectoryName(effectivePaths.FirstOrDefault());
+                        break;
+                    case "fullpath":
+                        replacement = string.Join(", ", effectivePaths);
+                        break;
+                    case "fullpath-single":
+                        replacement = effectivePaths.FirstOrDefault();
+                        break;
+                        // 可以根据需要添加更多的case
+                }
+
+                // 替换文本中的占位符
+                menuItem.Text = menuItem.Text.Replace(match.Value, replacement);
+            }
+
+
 
             // 加载图标
             if (!string.IsNullOrEmpty(config.IconPath))
@@ -181,7 +238,7 @@ namespace MenuFunctions
                     // 根据 ShowOnFolderBackground 和 ShowOnFiles 决定是否添加子菜单项
                     if ((isFolderBackground && subItemConfig.ShowOnFolderBackground) || (isFile && subItemConfig.ShowOnFiles) || (isFolder && subItemConfig.ShowOnFolder))
                     {
-                        AddMenuItem(menuItem.DropDownItems, subItemConfig, currentFolderPath);
+                        AddMenuItem(menuItem.DropDownItems, subItemConfig, currentFolderPath, selectedPaths);
                         hasVisibleSubItems = true;
                     }
                 }
@@ -215,7 +272,7 @@ namespace MenuFunctions
                 // 将命令附加到每个路径后面，并将整个组合用引号包围
                 // 当OnlyUsingProgram为false时，清空selectedPaths，避免添加菜单路径
                 if (!config.OnlyUsingProgram) {
-                    args = string.Join(" ", selectedPaths.Select(p => $"\"{p} {config.Command}\""));
+                    args = string.Join(" ", selectedPaths.Select(p => $"\"{config.Command} {p}\""));
                 }
                 else
                 {
@@ -223,7 +280,7 @@ namespace MenuFunctions
                 }
                    
             }
-            else if (config.AppendCommandToEachPath)
+            else if (config.AppendCommandToEachPath && string.IsNullOrEmpty(config.Command))
             {
                 // 如果命令为空，只添加路径
                 if (!config.OnlyUsingProgram)
@@ -237,7 +294,7 @@ namespace MenuFunctions
                   
             }
             else
-            {
+            {   //config.AppendCommandToEachPath 这里为假
                 // 将命令放在所有路径的最后，每个路径保持单独一行
                 string selectedPathsArg = string.Join(" ", selectedPaths.Select(p => $"\"{p}\""));
 
@@ -246,8 +303,13 @@ namespace MenuFunctions
                 {
                     if (!config.OnlyUsingProgram)
                     {
-                        args = $"{selectedPathsArg} \"{config.Command}\"";
+                        //args = $"\"{config.Command}\n\"{selectedPathsArg}\"\"";
+                        string[] argsArray;
+                        argsArray = new string[] { $"\"{config.Command}\"", selectedPathsArg };
+                        args = string.Join(" ", argsArray);
                     }
+
+                
                     else
                     {
                         args = $"{config.Command}";
@@ -277,7 +339,7 @@ namespace MenuFunctions
                         // 将命令附加到当前文件夹路径后面，并将整个组合用引号包围
                         if (!config.OnlyUsingProgram)
                         {
-                            args = $"\"{currentFolderPath} {config.Command}\"";
+                            args = $"\"{config.Command} \"{currentFolderPath}\"\"";
                         }
                         else
                         {
@@ -307,7 +369,7 @@ namespace MenuFunctions
                     {
                         if (!config.OnlyUsingProgram)
                         {
-                            args = string.Join(" ", $"\"{currentFolderPath}\"", $"\"{config.Command}\"");
+                            args = string.Join(" ",  $"\"{config.Command}\"", $"\"{currentFolderPath}\"");
                         }
                         else
                         {
@@ -334,7 +396,7 @@ namespace MenuFunctions
 
                 if (!config.OnlyUsingProgram)
                 {
-                    args = string.Join(" ", $"\"{currentFolderPath}\"", $"\"{config.Command}\"");
+                    args = string.Join(" ", $"\"{config.Command}\"", $"\"{currentFolderPath}\"");
                 }
                 else
                 {
@@ -370,12 +432,55 @@ namespace MenuFunctions
 
                             if (string.IsNullOrEmpty(args)) {
 
-                                Process.Start(config.ProgramPath);
+                                if (!config.RunningProgramWithCMD) {
+
+
+                                    if (config.DisplayCompletePathAndCommand) {
+                                        MessageBox.Show(config.ProgramPath,"显示全部的路径和命令");
+                                    }
+
+                                    Process.Start(config.ProgramPath);
+
+                                }
+                                else
+                                {
+
+                                    if (config.DisplayCompletePathAndCommand)
+                                    {
+                                        MessageBox.Show(config.ProgramPath, "显示全部的路径和命令");
+                                    }
+
+                                    BasicFunctions.ExecuteCommand(config.ProgramPath,"", config.HideCmdWindow, config.KeepCmdWindows);
+
+                                }
+
+                                
                             }
                             else
                             {
-                                
-                                Process.Start(config.ProgramPath ,args);
+                                if (!config.RunningProgramWithCMD)
+                                {
+
+                                    if (config.DisplayCompletePathAndCommand)
+                                    {
+                                        MessageBox.Show(config.ProgramPath + " " + args, "显示全部的路径和命令");
+                                    }
+
+
+                                    Process.Start(config.ProgramPath, args);
+
+                                }
+                                else
+                                {
+
+                                    if (config.DisplayCompletePathAndCommand)
+                                    {
+                                        MessageBox.Show(config.ProgramPath + " " + args, "显示全部的路径和命令");
+                                    }
+
+                                    BasicFunctions.ExecuteCommand(config.ProgramPath, args, config.HideCmdWindow, config.KeepCmdWindows);
+
+                                }                               
 
                             }
                                
@@ -415,12 +520,24 @@ namespace MenuFunctions
                     if (string.IsNullOrEmpty(args))
                     {
 
-                        Process.Start("DisplayPathTools.exe");
+                        MessageBox.Show("未传入任何参数");
+                        //Process.Start("DisplayPathTools.exe");
                     }
                     else
                     {
+                        // 以" "为分隔符来分割字符串
+                        var splitArgs = args.Split(new[] { "\" \"" }, StringSplitOptions.RemoveEmptyEntries);
 
-                        Process.Start("DisplayPathTools.exe", args);
+                        // 对每个分割后的字符串去除首尾的引号
+                        var paths = splitArgs.Select(arg => arg.Trim('\"')).ToList();
+
+                        // 将所有路径合并为多行文本
+                        string multiLineText = string.Join("\n", paths);
+
+     
+
+                        MessageBox.Show(multiLineText);
+                        //Process.Start("DisplayPathTools.exe", args);
 
                     }
 
@@ -463,10 +580,14 @@ namespace MenuFunctions
             public bool ShowOnFolderBackground { get; set; } = true; // 显示在文件夹背景
 
             public bool ShowOnFolder { get; set; } = true; // 显示在文件夹上
-
-
             public bool OnlyUsingProgram { get; set; } = false; // 默认为 false
-            
+            public bool RunningProgramWithCMD { get; set; } = false; //这个用CMD运行命令 在ProgramPath填入命令后,可以直接运行命令
+            public bool HideCmdWindow { get; set; } = false; //隐藏cmd窗口.比如执行一些命令,不希望闪出来黑框.就这个改为ture
+            public bool KeepCmdWindows { get; set; } = false; //保持cmd窗口,这个会用cmd /k 运行命令,可以保证cmd窗口存在,方便看一些信息返回值,防止一闪而过
+
+            public bool IsSeparator { get; set; } = false; // 标识是否为分割线
+
+            public bool DisplayCompletePathAndCommand { get; set; } = false; // 额外显示完整的路径和命令供检查
         }
 
 
@@ -587,8 +708,12 @@ namespace MenuFunctions
                     {
                         image = new Icon(path).ToBitmap();
                     }
-                    // 如果是可执行文件，提取图标
-                    else if (extension == ".exe" || extension == ".com" || extension == ".msc" || extension == ".msi" || extension == ".lnk")
+                    //// 如果是可执行文件，提取图标
+                    //else if (extension == ".exe" || extension == ".com" || extension == ".msc" || extension == ".msi" || extension == ".lnk" || extension == ".dll" || extension == ".json" || extension == ".xml" || extension == ".txt" || extension == ".bat")
+                    //{
+                    //    image = ExtractIconFromExe(path);
+                    //}
+                    else
                     {
                         image = ExtractIconFromExe(path);
                     }
@@ -776,17 +901,26 @@ namespace MenuFunctions
         {
             try
             {
+                // 以" "为分隔符来分割字符串
+                var splitArgs = text.Split(new[] { "\" \"" }, StringSplitOptions.RemoveEmptyEntries);
+
+                // 对每个分割后的字符串去除首尾的引号
+                var paths = splitArgs.Select(arg => arg.Trim('\"')).ToList();
+
+                // 将所有路径合并为多行文本
+                string multiLineText = string.Join("\n", paths);
+
                 // 确保我们在STA线程模式下，因为剪贴板操作需要STA模式
                 if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
                 {
-                    Thread staThread = new Thread(() => Clipboard.SetText(text));
+                    Thread staThread = new Thread(() => Clipboard.SetText(multiLineText));
                     staThread.SetApartmentState(ApartmentState.STA);
                     staThread.Start();
                     staThread.Join();
                 }
                 else
                 {
-                    Clipboard.SetText(RemoveQuotes(text));
+                    Clipboard.SetText(multiLineText);
                 }
             }
             catch (Exception ex)
@@ -821,6 +955,32 @@ namespace MenuFunctions
             return input.Replace("'", "").Replace("\"", "");
         }
 
+        public static void ExecuteCommand(string command, string argument = "", bool hideCmdWindow = true, bool keepCmdWindow = false)
+        {
+            // 构建要执行的命令字符串
+            var cmdArguments = "/C " + command;
+            if (!string.IsNullOrEmpty(argument))
+            {
+                cmdArguments += " " + argument;
+            }
+
+            // 如果保持窗口打开，则使用 "/K" 而非 "/C"
+            if (keepCmdWindow)
+            {
+                cmdArguments = "/K " + command + (string.IsNullOrEmpty(argument) ? "" : " " + argument);
+            }
+
+            // 设置 ProcessStartInfo
+            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe", cmdArguments)
+            {
+                CreateNoWindow = hideCmdWindow && !keepCmdWindow, // 如果保持窗口，则不隐藏窗口
+                UseShellExecute = false
+            };
+
+            // 启动进程
+            Process process = new Process { StartInfo = processStartInfo };
+            process.Start();
+        }
     }
 
 }
