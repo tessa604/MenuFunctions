@@ -18,6 +18,8 @@ packages/
 # 忽略 bin 目录
 bin/
 obj/
+Debug/
+Release/
 
 
 # 更多忽略规则...

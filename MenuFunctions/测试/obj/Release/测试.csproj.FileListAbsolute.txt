@@ -1,9 +1,0 @@
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\bin\Release\测试.exe.config
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\bin\Release\测试.exe
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\bin\Release\测试.pdb
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\测试.csproj.AssemblyReference.cache
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\测试.csproj.CoreCompileInputs.cache
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\测试.exe
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\测试.pdb
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\Interop.IWshRuntimeLibrary.dll
-D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\测试\obj\Release\测试.csproj.ResolveComReference.cache
