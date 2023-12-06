@@ -1,0 +1,23 @@
+# 忽略所有 .exe 文件
+*.exe
+*.rar
+*.zip
+*.7z
+*.dll
+git.txt
+
+
+# 忽略 Visual Studio 临时文件和用户特定文件
+*.user
+*.suo
+.vs/
+
+# 忽略 NuGet Packages
+packages/
+
+# 忽略 bin 目录
+bin/
+obj/
+
+
+# 更多忽略规则...

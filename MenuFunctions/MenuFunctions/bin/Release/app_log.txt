@@ -1,2 +1,0 @@
-2023/12/5 22:56:29: MenuFunctions右键菜单的加载配置文件时出错: 文件“D:\OneDrive - qxyl\C#\C#下使用SharpShell自定义桌面鼠标右键菜单，一次选择多个文件进行后续处理\AuroraContextMenu\AuroraContextMenu\bin\Release\MenuConfig.json”正由另一进程使用，因此该进程无法访问此文件。
-2023/12/5 23:02:14: Error loading image from path 'https://avatar.52pojie.cn/images/noavatar_small.gif': 请求被中止: 未能创建 SSL/TLS 安全通道。
