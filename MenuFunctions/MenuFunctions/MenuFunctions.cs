@@ -260,152 +260,83 @@ namespace MenuFunctions
         // 菜单动作
         private void Item_Click(object sender, EventArgs e, MenuItemConfig config, string currentFolderPath)
         {
-            // 获取选中的文件或目录的路径
-            var selectedPaths = SelectedItemPaths.ToList(); 
-           
-  
+            var selectedPaths = SelectedItemPaths.ToList();
 
             string args;
 
+            // 添加或去除引号的辅助方法，应用于路径
+            Func<string, string> quotePathIfNeeded = path => config.UseQuotes ? $"\"{path}\"" : path;
+
+            // 构建 args 字符串
             if (config.AppendCommandToEachPath && !string.IsNullOrEmpty(config.Command))
             {
-                // 将命令附加到每个路径后面，并将整个组合用引号包围
-                // 当OnlyUsingProgram为false时，清空selectedPaths，避免添加菜单路径
-                if (!config.OnlyUsingProgram) {
-                    args = string.Join(" ", selectedPaths.Select(p => $"\"{config.Command} {p}\""));
-                }
-                else
-                {
-                    args = $"{config.Command}";
-                }
-                   
-            }
-            else if (config.AppendCommandToEachPath && string.IsNullOrEmpty(config.Command))
-            {
-                // 如果命令为空，只添加路径
                 if (!config.OnlyUsingProgram)
                 {
-                    args = string.Join(" ", selectedPaths.Select(p => $"\"{p}\""));
+                    args = string.Join(" ", selectedPaths.Select(p => $"{config.Command} {quotePathIfNeeded(p)}"));
                 }
                 else
                 {
-                    args ="";
+                    args = config.Command;
                 }
-                  
+            }
+            else if (config.AppendCommandToEachPath)
+            {
+                if (!config.OnlyUsingProgram)
+                {
+                    args = string.Join(" ", selectedPaths.Select(quotePathIfNeeded));
+                }
+                else
+                {
+                    args = "";
+                }
             }
             else
-            {   //config.AppendCommandToEachPath 这里为假
-                // 将命令放在所有路径的最后，每个路径保持单独一行
-                string selectedPathsArg = string.Join(" ", selectedPaths.Select(p => $"\"{p}\""));
-
-                // 只有当命令非空时才添加
+            {
+                string selectedPathsArg = string.Join(" ", selectedPaths.Select(quotePathIfNeeded));
                 if (!string.IsNullOrEmpty(config.Command))
                 {
                     if (!config.OnlyUsingProgram)
                     {
-                        //args = $"\"{config.Command}\n\"{selectedPathsArg}\"\"";
-                        string[] argsArray;
-                        argsArray = new string[] { $"\"{config.Command}\"", selectedPathsArg };
-                        args = string.Join(" ", argsArray);
+                        args = $"{config.Command} {selectedPathsArg}";
                     }
-
-                
                     else
                     {
-                        args = $"{config.Command}";
+                        args = config.Command;
                     }
                 }
                 else
                 {
-                    if (!config.OnlyUsingProgram)
-                    {
-                        args = selectedPathsArg;
-                    }
-                    else { 
-                        args = ""; 
-                    }
-                        
+                    args = selectedPathsArg;
                 }
             }
 
-
             // 如果没有选中任何路径，则使用当前文件夹路径
+
             if (string.IsNullOrEmpty(args) && !string.IsNullOrEmpty(currentFolderPath))
             {
-                if (config.AppendCommandToEachPath)
+                if (!config.OnlyUsingProgram)
                 {
-                    if (!string.IsNullOrEmpty(config.Command))
-                    {
-                        // 将命令附加到当前文件夹路径后面，并将整个组合用引号包围
-                        if (!config.OnlyUsingProgram)
-                        {
-                            args = $"\"{config.Command} \"{currentFolderPath}\"\"";
-                        }
-                        else
-                        {
-                            args = $"{config.Command}";
-                        }
-                    }
-                    else
-                    {
-                        if (!config.OnlyUsingProgram)
-                        {
-                            // 如果命令为空，只添加当前文件夹路径
-                            args = $"\"{currentFolderPath}\"";
-                        }
-                        else
-                        {
-                            args = "";
-
-                        }
-                      
-                      
-                    }
+                    args = config.AppendCommandToEachPath && !string.IsNullOrEmpty(config.Command) ?
+                        $"{config.Command} {quotePathIfNeeded(currentFolderPath)}" : quotePathIfNeeded(currentFolderPath);
                 }
                 else
                 {
-                    // 当AppendCommandToEachPath为false时，如果有命令，将命令和路径分开添加
-                    if (!string.IsNullOrEmpty(config.Command))
-                    {
-                        if (!config.OnlyUsingProgram)
-                        {
-                            args = string.Join(" ",  $"\"{config.Command}\"", $"\"{currentFolderPath}\"");
-                        }
-                        else
-                        {
-                            args = $"{config.Command}";
-                        }
-                        
-                    }
-                    else
-                    {
-                        if (!config.OnlyUsingProgram)
-                        {
-                            args = $"\"{currentFolderPath}\"";
-                        }
-                        else
-                        {
-                            args = "";
-                        }
-                    }
+                    args = config.AppendCommandToEachPath && !string.IsNullOrEmpty(config.Command) ?
+                        config.Command : "";
                 }
             }
 
             if (!string.IsNullOrEmpty(args) && !string.IsNullOrEmpty(currentFolderPath) && !config.AppendCommandToEachPath)
             {
-
                 if (!config.OnlyUsingProgram)
                 {
-                    args = string.Join(" ", $"\"{config.Command}\"", $"\"{currentFolderPath}\"");
+                    args = $"{config.Command} {quotePathIfNeeded(currentFolderPath)}";
                 }
                 else
                 {
-                    args = $"{config.Command}";
+                    args = config.Command;
                 }
-
-
             }
-
 
 
             // 如果指定了程序路径，则启动该程序并传递参数
@@ -427,7 +358,26 @@ namespace MenuFunctions
                             //MessageBox.Show(args);
                             ExplorerHelper.OpenFolderAndSelectItem(args); 
                             break;
+                        case "messagebox.show":
+                            //args= BasicFunctions.RemoveQuotes(args);
+                            //MessageBox.Show(config.Command);
+                            //ExplorerHelper.OpenFolderAndSelectItem(args);
 
+                            // 分割字符串
+                            string[] parts = config.Command.Split(',');
+
+                            // 检查字符串是否包含逗号
+                            if (parts.Length >= 2)
+                            {
+                                // 如果有逗号，第一部分作为内容，第二部分作为标题
+                                MessageBox.Show(parts[0], parts[1]);
+                            }
+                            else
+                            {
+                                // 如果没有逗号，使用整个字符串作为内容，并提供一个默认标题
+                                MessageBox.Show(config.Command);
+                            }
+                            break;
                         default:
 
                             if (string.IsNullOrEmpty(args)) {
@@ -588,6 +538,8 @@ namespace MenuFunctions
             public bool IsSeparator { get; set; } = false; // 标识是否为分割线
 
             public bool DisplayCompletePathAndCommand { get; set; } = false; // 额外显示完整的路径和命令供检查
+
+            public bool UseQuotes { get; set; } = true; // 加引号
         }
 
 
