@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "实现运行效果", "实�
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "测试", "测试\测试.csproj", "{4E0DA51C-ECE6-40D6-A199-C2BEB44E8B15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "按键测试", "按键测试\按键测试.csproj", "{AB5C5856-CD60-4994-B75F-01542D99F05D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "按键测试2", "按键测试2\按键测试2.csproj", "{0CCAD1A0-93F4-468F-A1E2-03E3C6C1BC08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,19 @@ Global
 		{4E0DA51C-ECE6-40D6-A199-C2BEB44E8B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E0DA51C-ECE6-40D6-A199-C2BEB44E8B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E0DA51C-ECE6-40D6-A199-C2BEB44E8B15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5C5856-CD60-4994-B75F-01542D99F05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5C5856-CD60-4994-B75F-01542D99F05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5C5856-CD60-4994-B75F-01542D99F05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5C5856-CD60-4994-B75F-01542D99F05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CCAD1A0-93F4-468F-A1E2-03E3C6C1BC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CCAD1A0-93F4-468F-A1E2-03E3C6C1BC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CCAD1A0-93F4-468F-A1E2-03E3C6C1BC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CCAD1A0-93F4-468F-A1E2-03E3C6C1BC08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8BAF846-176F-4FD5-B99A-B131DB174BF3}
 	EndGlobalSection
 EndGlobal

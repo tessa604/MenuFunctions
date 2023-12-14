@@ -30,9 +30,9 @@ namespace MenuFunctions
     //[COMServerAssociation(AssociationType.AllFiles), COMServerAssociation(AssociationType.Directory)]
 
 
-    [COMServerAssociation(AssociationType.AllFiles), COMServerAssociation(AssociationType.Directory), COMServerAssociation(AssociationType.DirectoryBackground)]
-
-
+    [COMServerAssociation(AssociationType.AllFilesAndFolders), COMServerAssociation(AssociationType.Directory), COMServerAssociation(AssociationType.DirectoryBackground)]
+    [COMServerAssociation(AssociationType.Drive), COMServerAssociation(AssociationType.UnknownFiles), COMServerAssociation(AssociationType.DesktopBackground), COMServerAssociation(AssociationType.Class)]
+    [COMServerAssociation(AssociationType.ClassOfExtension)]
 
     public class ArrContextMenu : SharpContextMenu
     {
@@ -51,11 +51,24 @@ namespace MenuFunctions
             // 判断是否在文件夹上
             bool isFolder = SelectedItemPaths.Any(p => Directory.Exists(p));
 
-
-
-
             // 获取当前文件夹路径
-            currentFolderPath = isFolderBackground ? ShellHelper.GetForegroundExplorerPath() : null;
+            if (isFolderBackground)
+            {
+                IntPtr pidl = ShellHelper.GetForegroundExplorerPIDL(); // 获取当前文件夹的 PIDL
+                
+                currentFolderPath = GetFolderPath(pidl);
+                Marshal.FreeCoTaskMem(pidl); // 释放 PIDL
+            }
+            else
+            {
+                currentFolderPath = null;
+            }
+
+            if (string.IsNullOrEmpty(currentFolderPath)) {
+
+                currentFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            }
 
 
             foreach (var itemConfig in LoadMenuItemsFromConfig())
@@ -80,12 +93,19 @@ namespace MenuFunctions
                 {
                     return true;
                 }
-
             }
             return false;
         }
 
-
+        private string GetFolderPath(IntPtr pidl)
+        {
+            StringBuilder path = new StringBuilder(260); // MAX_PATH
+            if (Shell32.SHGetPathFromIDList(pidl, path))
+            {
+                return path.ToString();
+            }
+            return null;
+        }
 
 
         /// <summary>
@@ -776,13 +796,41 @@ namespace MenuFunctions
 
         public static string GetForegroundExplorerPath()
         {
+            IntPtr pidl = GetForegroundExplorerPIDL();
+            if (pidl != IntPtr.Zero)
+            {
+                StringBuilder path = new StringBuilder(260);
+                if (SHGetPathFromIDListW(pidl, path))
+                {
+                    Marshal.FreeCoTaskMem(pidl);
+                    return path.ToString();
+                }
+                Marshal.FreeCoTaskMem(pidl);
+            }
+
+            // 如果无法获取路径，返回桌面路径
+            return Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        }
+
+        public static IntPtr GetForegroundExplorerPIDL()
+        {
             try
             {
                 IntPtr hwnd = GetForegroundWindow();
                 if (hwnd == IntPtr.Zero)
                 {
                     Logger.Log("Foreground window handle is zero.");
-                    return Environment.GetFolderPath(Environment.SpecialFolder.Desktop); // 返回桌面路径
+                    return IntPtr.Zero;
+                }
+
+                // 检查是否在桌面上
+                IntPtr desktopHwnd = GetDesktopWindow();
+                if (hwnd == desktopHwnd)
+                {
+                    // 在桌面上，返回桌面的 PIDL
+                    IntPtr desktopPidl;
+                    SHParseDisplayName(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), IntPtr.Zero, out desktopPidl, 0, out _);
+                    return desktopPidl;
                 }
 
                 var shellWindows = new SHDocVw.ShellWindows();
@@ -792,44 +840,42 @@ namespace MenuFunctions
                     {
                         IntPtr pidl;
                         SHParseDisplayName(window.LocationURL, IntPtr.Zero, out pidl, 0, out _);
-                        if (pidl != IntPtr.Zero)
-                        {
-                            StringBuilder path = new StringBuilder(260);
-                            if (SHGetPathFromIDListW(pidl, path))
-                            {
-                                Marshal.FreeCoTaskMem(pidl);
-                                //Logger.Log("Foreground Explorer Path: " + path.ToString());
-                                return path.ToString();
-                            }
-                            Marshal.FreeCoTaskMem(pidl);
-                        }
-                        break;
+                        return pidl;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log("Error in GetForegroundExplorerPath: " + ex.Message);
+                Logger.Log("Error in GetForegroundExplorerPIDL: " + ex.Message);
             }
 
-            // 如果无法获取路径，返回桌面路径
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            // Logger.Log("Foreground Explorer Path not found, returning desktop path: " + desktopPath);
-            return desktopPath;
+            return IntPtr.Zero;
         }
-
-
-
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDesktopWindow();
     }
+
 
 
 
     public static class Logger
     {
+
+
+
+
+
+
         private static string logFilePath = "app_log.txt"; // 日志文件的路径
 
         public static void Log(string message)
         {
+
+
+            string assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string directoryPath = Path.GetDirectoryName(assemblyPath);
+            logFilePath = Path.Combine(directoryPath, "App_Log.txt");
+
             try
             {
                 // 将消息和时间戳写入日志文件
@@ -935,5 +981,10 @@ namespace MenuFunctions
         }
     }
 
+    public static class Shell32
+    {
+        [DllImport("shell32.dll")]
+        public static extern bool SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
+    }
 }
 
