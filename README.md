@@ -35,3 +35,150 @@ MenuConfig.json是配置文件,不可删.修改里面配置会实时生效.
 
 这个配置文件模板 放到了原始Json文件备份里,名字是MenuConfig_new.json,有兴趣可以改名用这个试试
 另外查了查GPT说是win11的多标签获取路径好像弄不了,先这样把.测试这个测试的我要吐啊...
+
+
+
+
+=========================================================================
+=========================================================================
+
+
+
+
+MenuFunctions，windows右键菜单扩展
+可以分别设置显示在文件右键菜单,目录菜单,文件夹背景菜单 可直接运行程序,路径,网址,cmd命令
+https://github.com/onlyclxy/MenuFunctions
+
+自定义Windows系统右键菜单工具
+https://github.com/bigsinger/CustomContextMenu
+
+生成Windows右键菜单的注册文件
+https://github.com/GHJayce/RightClickMenu
+
+一个 windows 桌面右键菜单脚本丰富工具
+https://github.com/C4skg/pycontextmenu
+nextcloud-uploader
+https://github.com/kkzzhizhou/nextcloud-uploader
+
+格式化工具添加 Windows 右键菜单选项的工具
+https://github.com/jugolink/AstyleFormatter
+AATexDiff
+https://github.com/aasdl1/AATexDiff
+
+filebrowser，将filebrowser添加到右键菜单选项中
+https://github.com/filebrowser/filebrowser/releases/
+https://github.com/filebrowser/filebrowser
+
+利用JQuery开发的类windows方式操作文件功能(右键菜单，二级菜单，拖动选中，Ctrl+Shift快捷键选择文件等)
+https://github.com/lizhenfeiok/use-files-like-windows?tab=readme-ov-file
+MinIO QuickUpload，允许用户通过鼠标右键菜单将文件快速上传到 MinIO 云存储。
+https://github.com/htobs/MinIO-QuickUpload
+Windows Path Manager
+https://github.com/nuomi77/windows-path-manager
+文件一键整理与复原工具
+https://github.com/Chiyang001/file_sort
+
+
+Folder-Hider，用bat写的文件夹伪装成回收站或者别的系统文件夹的工具，可添加到右键菜单
+https://github.com/Looomo/Folder-Hider
+
+win-script，构建鼠标右键菜单
+https://github.com/rj-hwang/win-script
+
+VS项目右键菜单扩展，VSProjectContextMenuExtend
+https://github.com/usernamedd/VSProjectContextMenuExtend
+
+
+
+
+=========================================================================
+=========================================================================
+
+
+计算机\HKEY_CLASSES_ROOT\CLSID\{29541F5E-F157-386D-93A0-792253DF0573}
+
+/ve /t REG_SZ /d MenuFunctions.ArrContextMenu /f
+ |_ _ _ _"\Implemented Categories"  /ve /t REG_SZ /f
+	 |_ _ _ _ "\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" /ve /t REG_SZ /f
+
+ |_ _ _ _\InprocServer32
+	/ve /t REG_SZ /d mscoree.dll /f
+	/v Assembly /t REG_SZ /d "MenuFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ab16c9fcf51914e7" /f
+	/v Class /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+	/v CodeBase /t REG_SZ /d "file:///D:/360安全浏览器下载/Release/MenuFunctions.DLL" /f
+	/v RuntimeVersion /t REG_SZ /d v4.0.30319 /f
+	/v ThreadingModel /t REG_SZ /d Both /f
+
+ |_ _ _ "\1.0.0.0"
+	/v Assembly /t REG_SZ /d "MenuFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ab16c9fcf51914e7" /f
+	/v Class /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+	/v CodeBase /t REG_SZ /d "file:///D:/360安全浏览器下载/Release/MenuFunctions.DLL" /f
+	/v RuntimeVersion /t REG_SZ /d "v4.0.30319" /f
+
+ |_ _ _ _\ProgId
+	/ve /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+
+
+
+计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{29541F5E-F157-386D-93A0-792253DF0573}
+
+ |_ _ _ _\Implemented Categories
+	 |_ _ _ _{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}
+ |_ _ _ _ \InprocServer32
+	/ve /t REG_SZ /d mscoree.dll /f
+	/v Assembly /t REG_SZ /d "MenuFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ab16c9fcf51914e7" /f
+	/v Class /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+	/v CodeBase /t REG_SZ /d "file:///D:/360安全浏览器下载/Release/MenuFunctions.DLL" /f
+	/v RuntimeVersion /t REG_SZ /d "v4.0.30319" /f
+	/v ThreadingModel /t REG_SZ /d "Both" /f
+
+             |_ _ _ _\1.0.0.0
+	/v Assembly /t REG_SZ /d "MenuFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ab16c9fcf51914e7" /f
+	/v Class /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+	/v CodeBase /t REG_SZ /d "file:///D:/360安全浏览器下载/Release/MenuFunctions.DLL" /f
+	/v RuntimeVersion /t REG_SZ /d "v4.0.30319" /f
+
+ |_ _ _ _ "\ProgId" /ve /t REG_SZ /d "MenuFunctions.ArrContextMenu" /f
+
+
+
+=========================================================================
+=========================================================================
+
+
+注册表编辑器
+Registry Workshop
+software
+RegTest-Microsoft Visual Studio
+
+右键扩展菜单管理器
+Visual C++ 6.0
+DesSpace
+desktopOK
+desktops
+
+regworkshop
+MSDN Library-visual studio 2008
+
+注册表添加与删除
+RegCreateKeyEx Function函数
+
+更改盘符的图标
+C++实现添加桌面右键新建菜单
+C&C++实现的右键自定义菜单实现
+
+
+
+
+
+
+
+=========================================================================
+=========================================================================
+
+
+
+
+
+
+
